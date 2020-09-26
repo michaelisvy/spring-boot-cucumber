@@ -28,13 +28,13 @@ public class BagCucumberStepDefinitions {
     @Autowired
     private BagHttpClient bagHttpClient;
 
-    @Given("^the bag is empty$")
+    @Given("the bag is empty")
     public void the_bag_is_empty() {
         bagHttpClient.clean();
         assertThat(bagHttpClient.getContents().isEmpty()).isTrue();
     }
 
-    @When("^I put (\\d+) (\\w+) in the bag$")
+    @When("I put {int} {word} in the bag")
     public void i_put_something_in_the_bag(final int quantity, final String something) {
         IntStream.range(0, quantity)
                 .peek(n -> log.info("Putting a {} in the bag, number {}", something, quantity))
@@ -42,12 +42,12 @@ public class BagCucumberStepDefinitions {
                 .forEach(statusCode -> assertThat(statusCode).isEqualTo(HttpStatus.CREATED.value()));
     }
 
-    @Then("^the bag should contain only (\\d+) (\\w+)$")
+    @Then("the bag should contain only {int} {word}")
     public void the_bag_should_contain_only_something(final int quantity, final String something) {
         assertNumberOfTimes(quantity, something, true);
     }
 
-    @Then("^the bag should contain (\\d+) (\\w+)$")
+    @Then("the bag should contain {int} {word}")
     public void the_bag_should_contain_something(final int quantity, final String something) {
         assertNumberOfTimes(quantity, something, false);
     }
